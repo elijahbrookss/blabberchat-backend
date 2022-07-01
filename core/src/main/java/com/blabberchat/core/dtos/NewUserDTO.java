@@ -3,6 +3,7 @@ package com.blabberchat.core.dtos;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 @Component
@@ -20,4 +21,7 @@ public class NewUserDTO {
 
     @NotEmpty(message = "User's profile picture must not be null")
     private String profilePicture;
+
+    @NotEmpty
+    private String[] roles;
 }

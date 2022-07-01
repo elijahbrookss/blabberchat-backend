@@ -3,32 +3,25 @@ package com.blabberchat.core.controllers;
 
 import com.blabberchat.core.dtos.NewUserDTO;
 import com.blabberchat.core.models.User;
-import com.blabberchat.core.services.MainService;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.blabberchat.core.services.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class MainController {
-    private final MainService mainService;
+    private final UserService userService;
 
-    public MainController(MainService mainService) {
-        this.mainService = mainService;
-    }
 
     @PostMapping("/users")
-    public User getUser(@Valid @RequestBody NewUserDTO userDTO) {
-        return mainService.createNewUser(userDTO);
+    public ResponseEntity<User> getUser(@Valid @RequestBody NewUserDTO userDTO) {
+        return new ResponseEntity<>(userService.createUser(userDTO), HttpStatus.CREATED);
     }
-
-    @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return mainService.getAllUsers();
-    }
-
 
 }
