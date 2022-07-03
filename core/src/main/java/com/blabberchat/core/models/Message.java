@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,8 @@ public class Message {
     private LocalDateTime updatedAt;
 
     private User user;
+
+    @DBRef
     private Channel channel;
     private List<Reaction> reactions;
 }

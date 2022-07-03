@@ -3,9 +3,7 @@ package com.blabberchat.core.services;
 
 import com.blabberchat.core.dtos.NewUserDTO;
 import com.blabberchat.core.dtos.RoleDTO;
-import com.blabberchat.core.models.Role;
 import com.blabberchat.core.models.User;
-import com.blabberchat.core.repositories.RoleRepository;
 import com.blabberchat.core.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,7 +36,7 @@ public class UserService implements UserDetailsService {
         log.info("User found in database: {}", username);
 
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName())).toList();
+                .map(SimpleGrantedAuthority::new).toList();
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), simpleGrantedAuthorities);
@@ -53,6 +51,7 @@ public class UserService implements UserDetailsService {
                 .channels(new ArrayList<>())
                 .roles(convertRoleDTOtoRole(newUserDTO.getRoles()))
                 .build();
+
         userRepository.save(user);
 
         log.info("New user saved: {}", user.getUsername());
@@ -71,20 +70,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public Role createRole(String name) {
-        log.info("Create role: {}", name);
-        return roleRepository.save(Role.builder().name(name).build());
-    }
-
     // Convert List<RoleDTO> to List<Role>
-    private List<Role> convertRoleDTOtoRole(List<RoleDTO> roleDTOS) {
+    private Set<String> convertRoleDTOtoRole(List<RoleDTO> roleDTOS) {
         log.info("Converting RoleDTO to DTO, RoleDTOs: {}", roleDTOS);
-
-        return roleDTOS.stream()
-                .map(roleDTO ->
-                    roleRepository.findByName(roleDTO.getName())
-                           .orElse(roleRepository.save(Role.builder().name(roleDTO.getName()).build()))
-                ).collect(Collectors.toList());
+        return roleDTOS.stream().map(RoleDTO::getName).collect(Collectors.toSet());
     }
 }
 

@@ -1,7 +1,9 @@
 package com.blabberchat.core.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -9,12 +11,11 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Document("channels")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class Channel {
 
     @Id
@@ -26,7 +27,10 @@ public class Channel {
     private String description;
     private LocalDateTime createdAt;
 
-    private List<User> users;
-    private List<User> owners;
+    @JsonIgnoreProperties("channels")
+    private Set<User> users;
+
+    @JsonIgnoreProperties("channels")
+    private User owner;
 }
 
