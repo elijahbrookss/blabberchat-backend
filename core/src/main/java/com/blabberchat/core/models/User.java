@@ -30,6 +30,6 @@ public class User {
     private String profilePicture;
     private LocalDateTime createdAt;
 
-    private String[] roles;
+    private List<Role> roles;
     private List<Channel> channels;
 }

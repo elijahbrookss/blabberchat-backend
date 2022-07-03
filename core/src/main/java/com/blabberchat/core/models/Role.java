@@ -16,5 +16,5 @@ public class Role {
     private String id;
 
     @Indexed
-    private String role;
+    private String name;
 }
