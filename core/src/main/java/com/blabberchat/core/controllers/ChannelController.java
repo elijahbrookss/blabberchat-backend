@@ -25,14 +25,9 @@ public class ChannelController {
                 .body(channelService.createChannel(channelDTO));
     }
 
-    @GetMapping("/{channelId}")
-    public ResponseEntity<Channel> getChannel(@PathVariable String channelId) {
-        return ResponseEntity.ok().body(channelService.getChannel(channelId));
-    }
-
     @GetMapping()
     public ResponseEntity<List<Channel>> getAllChannels() {
-        return ResponseEntity.ok().body(channelService.getAllChannels());
+        return ResponseEntity.ok().body(channelService.getChannels());
     }
 
     @PostMapping("/{channelId}/join")

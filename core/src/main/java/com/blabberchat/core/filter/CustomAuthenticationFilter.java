@@ -49,7 +49,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             FilterChain chain,
             Authentication authResult
     ) throws IOException {
-        log.info(authResult.getPrincipal().toString());
 
         User user = (User) authResult.getPrincipal();
         Algorithm algorithm = UtilClass.getAlgorithm();

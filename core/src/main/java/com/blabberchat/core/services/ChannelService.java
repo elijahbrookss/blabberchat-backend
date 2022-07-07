@@ -45,17 +45,6 @@ public class ChannelService {
         return channel;
     }
 
-    public void deleteChannel() {
-    }
-
-    public Channel editChannel() {
-        return null;
-    }
-
-    public Channel getChannel(String channelId) {
-        return null;
-    }
-
     @PreAuthorize("hasAuthority('ADMIN_ROLE') or (hasAuthority('USER_ROLE') and #username == authentication.principal)")
     public List<Channel> getChannels(String username){
         User user = userRepository.findByUsername(username).orElseThrow();
